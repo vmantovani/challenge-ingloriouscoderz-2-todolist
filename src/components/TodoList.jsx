@@ -45,7 +45,7 @@ const TodoList = () => {
 
   return (
     <div>
-      <h1>Vinicius's Todo List</h1>
+      <h1>Vinicius&apos;s Todo List</h1>
       <form>
         <input
           type="text"
