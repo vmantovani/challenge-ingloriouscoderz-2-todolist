@@ -1,4 +1,6 @@
-import { useState, useEffect, useRef } from 'react'
+import { useState } from 'react'
+import TodoForm from './TodoForm'
+import TodoListItems from './TodoListItems'
 
 const TodoList = () => {
   const [todos, setTodos] = useState([
@@ -6,26 +8,10 @@ const TodoList = () => {
     { id: 2, text: 'Look for a job', completed: false },
     { id: 3, text: 'Forget everything', completed: false },
   ])
-  const [newTodo, setNewTodo] = useState('')
-  const inputRef = useRef(null)
 
-  useEffect(() => {
-    inputRef.current.focus()
-  }, [])
-
-  const addTodo = () => {
-    if (newTodo.trim() !== '') {
-      const newId = todos.length + 1
-      setTodos([...todos, { id: newId, text: newTodo, completed: false }])
-      setNewTodo('')
-    }
-  }
-
-  const handleKeyDown = (event) => {
-    if (event.key === 'Enter') {
-      event.preventDefault() // Evita que o formulário seja enviado
-      addTodo()
-    }
+  const addTodo = (newTodo) => {
+    const newId = todos.length + 1
+    setTodos([...todos, { id: newId, text: newTodo, completed: false }])
   }
 
   const toggleTodo = (id) => {
@@ -46,51 +32,12 @@ const TodoList = () => {
   return (
     <div>
       <h1>Vinicius&apos;s Todo List</h1>
-      <form>
-        <input
-          type="text"
-          placeholder="What next?"
-          value={newTodo}
-          onChange={(e) => setNewTodo(e.target.value)}
-          onKeyDown={handleKeyDown}
-          ref={inputRef}
-        />
-        <button type="button" onClick={addTodo}>
-          Add
-        </button>
-      </form>
-      <ul>
-        {todos.map((todo) => (
-          <li key={todo.id}>
-            <div
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-              }}
-            >
-              <p
-                style={{
-                  textDecoration: todo.completed ? 'line-through' : 'none',
-                  color: todo.completed ? 'gray' : 'black',
-                }}
-                onClick={() => toggleTodo(todo.id)}
-              >
-                {todo.text}
-              </p>
-              <button
-                onClick={() => deleteTodo(todo.id)}
-                style={{
-                  marginLeft: '5px',
-                  width: '22px',
-                  height: '22px',
-                }}
-              >
-                x
-              </button>
-            </div>
-          </li>
-        ))}
-      </ul>
+      <TodoForm addTodo={addTodo} />
+      <TodoListItems
+        todos={todos}
+        toggleTodo={toggleTodo}
+        deleteTodo={deleteTodo}
+      />
     </div>
   )
 }
